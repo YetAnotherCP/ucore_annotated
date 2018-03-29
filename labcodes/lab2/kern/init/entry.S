@@ -1,6 +1,10 @@
+# bootloader结束执行之后，跳到的ELF文件的入口点
+
 #include <mmu.h>
 #include <memlayout.h>
 
+# 大胆猜测这个函数的作用是，从逻辑地址计算出线性地址
+# 。。
 #define REALLOC(x) (x - KERNBASE)
 
 .text
@@ -47,9 +51,9 @@ bootstack:
     .globl bootstacktop
 bootstacktop:
 
-# kernel builtin pgdir
-# an initial page directory (Page Directory Table, PDT)
-# These page directory table and page table can be reused!
+# kernel自带的页表，包含必要的页目录表（Page Directory Table，PDT）和页表
+# 这些页目录表和页表是可以被重复利用的（虽然不知道在哪里重复，也不知道有什么意义）
+# 看不懂汇编在讲什么
 .section .data.pgdir
 .align PGSIZE
 __boot_pgdir:
@@ -67,4 +71,3 @@ __boot_pt1:
     .long i * PGSIZE + (PTE_P | PTE_W)
     .set i, i + 1
 .endr
-

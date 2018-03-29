@@ -102,8 +102,11 @@ bootmain(void) {
         readseg(ph->p_va & 0xFFFFFF, ph->p_memsz, ph->p_offset);
     }
 
-    // call the entry point from the ELF header
-    // note: does not return
+    // 从ELF头中找出可执行文件的入口地址
+    // 对于ELF文件来说，这个地址是虚拟线性地址空间内的（这是我的猜测）
+    // 此刻的段式存储进行的是对等映射，所以逻辑地址=线性地址=物理地址（？？？）
+    // 调用kern/init/entry.S
+    // 注意：在正常情况下此函数不会返回
     ((void (*)(void))(ELFHDR->e_entry & 0xFFFFFF))();
 
 bad:
@@ -113,4 +116,3 @@ bad:
     /* do nothing */
     while (1);
 }
-

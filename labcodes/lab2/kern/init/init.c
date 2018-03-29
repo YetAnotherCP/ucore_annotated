@@ -16,11 +16,17 @@ static void lab1_switch_test(void);
 
 int
 kern_init(void) {
+    // end似乎是ucore整体的最后部分。总之这里给什么东西清零了。
     extern char edata[], end[];
     memset(edata, 0, end - edata);
 
-    cons_init();                // init the console
+    // 调用kern/driver/console.c:cons_init()函数，初始化显示器、串口和键盘
+    // 做了很多有趣的事情，但是实验过程中完全不需要操心这些，也不需要另外设置
+    // 总之，ucore向外输出内容时，是同时向串口、并口和屏幕输出；读内容是通过键盘
+    cons_init();
 
+    // cprintf函数实现了向串口、并口和屏幕输出
+    // 平时不需要操心它是怎么输出的，直接用就可以了，debug时很方便
     const char *message = "(THU.CST) os is loading ...";
     cprintf("%s\n\n", message);
 
@@ -28,7 +34,9 @@ kern_init(void) {
 
     grade_backtrace();
 
-    pmm_init();                 // init physical memory management
+    // 初始化物理内存管理
+    // 是本次实验的重点理解内容
+    pmm_init();
 
     pic_init();                 // init interrupt controller
     idt_init();                 // init interrupt descriptor table
@@ -40,7 +48,8 @@ kern_init(void) {
     // user/kernel mode switch test
     //lab1_switch_test();
 
-    /* do nothing */
+    // 这之后内核就进入等待状态
+    // 发生时钟中断时会打印一些东西出来
     while (1);
 }
 
@@ -102,4 +111,3 @@ lab1_switch_test(void) {
     lab1_switch_to_kernel();
     lab1_print_cur_status();
 }
-

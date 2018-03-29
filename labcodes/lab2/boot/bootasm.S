@@ -1,12 +1,12 @@
 #include <asm.h>
 
-# Start the CPU: switch to 32-bit protected mode, jump into C.
-# The BIOS loads this code from the first sector of the hard disk into
-# memory at physical address 0x7c00 and starts executing in real mode
-# with %cs=0 %ip=7c00.
+# 这段代码的作用是在启动CPU之后切换到32位保护模式并跳转到C代码
+# BIOS将此代码从硬盘的第一个扇区加载到从物理
+# 地址0x7c00开始的内存，并在实模式下开始执行代码，此时CS=0，IP=7c00
+# 也即代码段从0x0000开始，当前指令指针为0x7c00，指令将从此处开始执行
 
-.set PROT_MODE_CSEG,        0x8                     # kernel code segment selector
-.set PROT_MODE_DSEG,        0x10                    # kernel data segment selector
+.set PROT_MODE_CSEG,        0x8                     # kernel代码段选择子（这是指向未来的GDT中的吗？）
+.set PROT_MODE_DSEG,        0x10                    # kernel数据段选择子
 .set CR0_PE_ON,             0x1                     # protected mode enable flag
 .set SMAP,                  0x534d4150
 

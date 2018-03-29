@@ -272,6 +272,10 @@ boot_alloc_page(void) {
 
 //pmm_init - setup a pmm to manage physical memory, build PDT&PT to setup paging mechanism
 //         - check the correctness of pmm & paging mechanism, print PDT&PT
+// 初始化用于管理物理内存的PMM（Physical Memory Manager，物理内存管理程序）
+// 创建页目录表（PDT）和页表（PT），开启分页机制
+// 检查PMM和分页机制的正确且，并打印出PDT和PT
+// 调用关系图：kern_init --> pmm_init()
 void
 pmm_init(void) {
     // We've already enabled paging
